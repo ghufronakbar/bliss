@@ -29,6 +29,7 @@ const PROPERTIES_DATA: Omit<
       "Sistem pendingin dan pemanas terpusat",
       "Ruang keluarga yang nyaman",
     ],
+    pdf: "https://res.cloudinary.com/dga0wmldp/image/upload/v1755259135/bliss/1720518370847_eutwci.pdf",
   },
   {
     name: "Villa Sunset Paradise",
@@ -53,6 +54,7 @@ const PROPERTIES_DATA: Omit<
       "Sistem pendingin dan pemanas terpusat",
       "Ruang keluarga yang nyaman",
     ],
+    pdf: "https://res.cloudinary.com/dga0wmldp/image/upload/v1755259135/bliss/1720518370847_eutwci.pdf",
   },
   {
     name: "Modern Downtown Loft",
@@ -77,6 +79,7 @@ const PROPERTIES_DATA: Omit<
       "Sistem pendingin dan pemanas terpusat",
       "Ruang keluarga yang nyaman",
     ],
+    pdf: "https://res.cloudinary.com/dga0wmldp/image/upload/v1755259135/bliss/1720518370847_eutwci.pdf",
   },
   {
     name: "Luxury Penthouse",
@@ -93,6 +96,7 @@ const PROPERTIES_DATA: Omit<
     ],
     description: "Exclusive penthouse with panoramic city views",
     features: ["Panoramic Views", "Private Terrace", "Luxury Finishes"],
+    pdf: "https://res.cloudinary.com/dga0wmldp/image/upload/v1755259135/bliss/1720518370847_eutwci.pdf",
   },
   {
     name: "Cozy Family Home",
@@ -109,7 +113,9 @@ const PROPERTIES_DATA: Omit<
     ],
     description: "Charming family home in quiet neighborhood",
     features: ["Family Friendly", "Large Backyard", "Good Schools"],
+    pdf: "https://res.cloudinary.com/dga0wmldp/image/upload/v1755259135/bliss/1720518370847_eutwci.pdf",
   },
+
   {
     name: "Beachfront Condo",
     address: "Santa Monica, California",
@@ -125,6 +131,7 @@ const PROPERTIES_DATA: Omit<
     ],
     description: "Modern condo with direct beach access",
     features: ["Beach Access", "Modern Amenities", "Great Location"],
+    pdf: "https://res.cloudinary.com/dga0wmldp/image/upload/v1755259135/bliss/1720518370847_eutwci.pdf",
   },
   {
     name: "Mountain View Estate",
@@ -141,6 +148,7 @@ const PROPERTIES_DATA: Omit<
     ],
     description: "Spacious estate with mountain views",
     features: ["Mountain Views", "Large Property", "Privacy"],
+    pdf: "https://res.cloudinary.com/dga0wmldp/image/upload/v1755259135/bliss/1720518370847_eutwci.pdf",
   },
   {
     name: "Urban Townhouse",
@@ -165,6 +173,7 @@ const PROPERTIES_DATA: Omit<
       "Sistem pendingin dan pemanas terpusat",
       "Ruang keluarga yang nyaman",
     ],
+    pdf: "https://res.cloudinary.com/dga0wmldp/image/upload/v1755259135/bliss/1720518370847_eutwci.pdf",
   },
   {
     name: "Garden Villa",
@@ -181,6 +190,7 @@ const PROPERTIES_DATA: Omit<
     ],
     description: "Beautiful villa with extensive gardens",
     features: ["Garden Views", "Outdoor Space", "Luxury Living"],
+    pdf: "https://res.cloudinary.com/dga0wmldp/image/upload/v1755259135/bliss/1720518370847_eutwci.pdf",
   },
 ];
 
