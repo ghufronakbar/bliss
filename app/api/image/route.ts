@@ -55,6 +55,7 @@ export async function POST(req: NextRequest) {
 
     const res = await uploadToCloudinary(fileUri, image.name);
     if (res.success && res.result) {
+      console.table(res.result);
       return NextResponse.json({
         url: res.result?.secure_url,
       });

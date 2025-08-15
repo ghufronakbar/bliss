@@ -1799,6 +1799,14 @@ const AdminPage = () => {
             </select>
           </Field>
 
+          <Field label="Katalog">
+            <FileUpload
+              value={propertyItem.pdf || ""}
+              onChange={(v) => setPropertyItem({ ...propertyItem, pdf: v })}
+              accept="application/pdf"
+            />
+          </Field>
+
           <div className="grid grid-cols-2 gap-3">
             <Field label="Kamar">
               <Input
@@ -1963,6 +1971,7 @@ const AdminPage = () => {
                 description: propertyItem.description,
                 features: propertyItem.features,
                 isAvailable: !!propertyItem.isAvailable,
+                pdf: propertyItem.pdf,
               })
             }
             onCancel={() => setPropertyItem(null)}

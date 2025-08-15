@@ -16,7 +16,7 @@ interface PropertyCardProps {
 
 export function PropertyCard({ property }: PropertyCardProps) {
   const isAvailable = property.isAvailable;
-  const availabilityLabel = isAvailable ? "Available" : "Sold Out";
+  const availabilityLabel = isAvailable ? "Tersedia" : "Tidak Tersedia";
   const availabilityColor = isAvailable ? "bg-green-600" : "bg-orange-600";
 
   return (
@@ -72,15 +72,17 @@ export function PropertyCard({ property }: PropertyCardProps) {
               <div className="flex items-center space-x-4 text-sm text-gray-600">
                 <div className="flex items-center space-x-1">
                   <Square className="h-4 w-4" />
-                  <span>{property.sqft} m²</span>
+                  <span className="line-clamp-1">{property.sqft} m²</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Bed className="h-4 w-4" />
-                  <span>{property.room} Kamar</span>
+                  <span className="line-clamp-1">{property.room} Kamar</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Bath className="h-4 w-4" />
-                  <span>{property.bath} Kamar Mandi</span>
+                  <span className="line-clamp-1">
+                    {property.bath} Kamar Mandi
+                  </span>
                 </div>
               </div>
             </div>

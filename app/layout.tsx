@@ -72,7 +72,7 @@ export default async function RootLayout({
         <link rel="icon" href={icon?.logo || ""} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full overflow-x-hidden`}
       >
         <TanstackProvider>
           {children}

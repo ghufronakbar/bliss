@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -11,8 +11,6 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import {
   ArrowLeft,
-  Heart,
-  Share2,
   Star,
   Bed,
   Bath,
@@ -25,9 +23,10 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useProperty } from "@/service/property";
-import { convertToIDR } from "@/helper/formatter";
+import { convertToIDR, convertToTitleCase } from "@/helper/formatter";
 import { useData } from "@/service/data";
 import { PLACEHOLDER_IMAGE } from "@/constants";
+import { useRouter } from "next/navigation";
 
 interface ProductDetailsClientProps {
   id: string;
@@ -36,11 +35,11 @@ export default function ProductDetailsClient({
   id,
 }: ProductDetailsClientProps) {
   const [selectedImage, setSelectedImage] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-
+  const router = useRouter();
   const { data, isLoading, isError } = useProperty(id);
   const { data: rootData } = useData();
+  const [isOpenImage, setIsOpenImage] = useState<string | null>(null);
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
@@ -62,11 +61,22 @@ export default function ProductDetailsClient({
     }
   };
 
-  if (isLoading || !rootData) return null;
+  const relatedProperties = useMemo(() => {
+    return rootData?.properties.filter(
+      (prop) => prop.id !== id && prop.type === data?.type
+    );
+  }, [rootData, id, data]);
+
+  if (isLoading || !rootData)
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <div className="w-10 h-10 border-t-transparent border-b-transparent border-r-transparent border-l-transparent border-2 border-primary-600 rounded-full animate-spin"></div>
+      </div>
+    );
 
   if (isError) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 w-full">
         <Header />
 
         {/* Breadcrumbs */}
@@ -103,12 +113,27 @@ export default function ProductDetailsClient({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 w-full">
       <Header />
 
+      {isOpenImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 w-full h-full"
+          onClick={() => setIsOpenImage(null)}
+        >
+          <Image
+            src={isOpenImage}
+            alt="Image"
+            width={1000}
+            height={1000}
+            className="object-contain cursor-pointer w-[90%] h-[90%] rounded-lg"
+          />
+        </div>
+      )}
+
       {/* Breadcrumbs */}
-      <div className="bg-white border-b border-gray-200 pt-16 lg:pt-20">
-        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+      <div className="bg-white border-b border-gray-200 pt-16 lg:pt-20 w-full">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 w-full">
           <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-600">
             <Link
               href="/"
@@ -123,48 +148,30 @@ export default function ProductDetailsClient({
         </div>
       </div>
 
-      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 w-full">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 w-full">
           {/* Left Column - Images */}
-          <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-3 sm:space-y-4 w-full md:w-1/2">
             {/* Main Image */}
-            <div className="relative aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-white shadow-lg">
+            <div className="relative aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-white shadow-lg w-full cursor-pointer">
               <Image
                 src={data?.images[selectedImage] || PLACEHOLDER_IMAGE}
                 alt={`${data?.name} - Image ${selectedImage + 1}`}
                 fill
-                className="object-cover"
+                className="object-cover cursor-pointer"
+                onClick={() =>
+                  setIsOpenImage(data?.images[selectedImage] || null)
+                }
               />
-              <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex space-x-2">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="h-8 w-8 sm:h-10 sm:w-10 p-0 rounded-full bg-white/90 hover:bg-white"
-                  onClick={() => setIsFavorite(!isFavorite)}
-                >
-                  <Heart
-                    className={`h-4 w-4 sm:h-5 sm:w-5 ${
-                      isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"
-                    }`}
-                  />
-                </Button>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="h-8 w-8 sm:h-10 sm:w-10 p-0 rounded-full bg-white/90 hover:bg-white"
-                >
-                  <Share2 className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
-                </Button>
-              </div>
             </div>
 
             {/* Thumbnail Images */}
-            <div className="grid grid-cols-4 gap-2 sm:gap-3">
+            <div className="flex flex-row gap-2 overflow-x-auto scrollbar-hide w-full">
               {data?.images.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                  className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all min-w-[100px] flex-shrink-0 ${
                     selectedImage === index
                       ? "border-primary-600 ring-2 ring-primary-200"
                       : "border-gray-200 hover:border-gray-300"
@@ -182,11 +189,11 @@ export default function ProductDetailsClient({
           </div>
 
           {/* Right Column - Details */}
-          <div className="space-y-4 sm:space-y-6">
+          <div className="space-y-4 sm:space-y-6 w-full md:w-1/2">
             {/* Category & Title */}
             <div>
               <Badge variant="secondary" className="mb-2 text-xs sm:text-sm">
-                Properti Mewah
+                {convertToTitleCase(data?.type || "")}
               </Badge>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
                 {data?.name}
@@ -204,7 +211,7 @@ export default function ProductDetailsClient({
               </div>
               <Badge
                 variant={data?.isAvailable ? "default" : "secondary"}
-                className={`text-xs sm:text-sm px-3 py-1 ${
+                className={`text-xs sm:text-sm px-3 py-1 w-fit ${
                   data?.isAvailable
                     ? "bg-green-600 hover:bg-green-700 text-white"
                     : "bg-orange-600 hover:bg-orange-700 text-white"
@@ -215,12 +222,12 @@ export default function ProductDetailsClient({
             </div>
 
             {/* Delivery Info */}
-            <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-600 bg-primary-50 p-3 rounded-lg">
+            <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-600 bg-primary-50 p-3 rounded-lg w-full">
               <Clock className="h-4 w-4 text-primary-600 flex-shrink-0" />
               <span>
                 {data?.isAvailable
                   ? "Segera pesan untuk mendapatkan properti ini"
-                  : "Properti sedang tidak"}
+                  : "Properti sedang tidak tersedia"}
               </span>
             </div>
 
@@ -262,6 +269,12 @@ export default function ProductDetailsClient({
               <Button
                 size="lg"
                 className="w-full sm:flex-1 bg-primary-600 hover:bg-primary-700 text-white text-sm sm:text-base"
+                onClick={() => {
+                  window.open(
+                    `https://wa.me/${rootData?.contact?.phone}`,
+                    "_blank"
+                  );
+                }}
               >
                 Hubungi Agen
               </Button>
@@ -270,8 +283,7 @@ export default function ProductDetailsClient({
                 variant="outline"
                 className="w-full sm:w-auto px-6 sm:px-8 text-sm sm:text-base border-2 border-primary-600 text-primary-600 hover:bg-primary-600 hover:text-white transition-all duration-200"
                 onClick={() => {
-                  // Open PDF in new tab
-                  window.open("/catalog.pdf", "_blank");
+                  window.open(data?.pdf || "", "_blank");
                 }}
               >
                 Lihat Katalog Lengkap
@@ -336,16 +348,20 @@ export default function ProductDetailsClient({
             className="flex gap-3 sm:gap-4 md:gap-6 overflow-x-auto scrollbar-hide pb-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {rootData?.properties
-              .filter((prop) => prop.id !== id && prop.type === data?.type)
-              .map((prop) => (
+            {relatedProperties && relatedProperties?.length > 0 ? (
+              relatedProperties?.map((prop) => (
                 <motion.div
                   key={prop.id}
                   whileHover={{ y: -4 }}
                   className="group cursor-pointer flex-shrink-0"
                   style={{ minWidth: "260px", maxWidth: "300px" }}
                 >
-                  <Card className="overflow-hidden w-full">
+                  <Card
+                    className="overflow-hidden w-full"
+                    onClick={() => {
+                      router.push(`/property/${prop.id}`);
+                    }}
+                  >
                     <div className="relative aspect-[4/3]">
                       <Image
                         src={prop.images[0] || PLACEHOLDER_IMAGE}
@@ -402,7 +418,15 @@ export default function ProductDetailsClient({
                     </CardContent>
                   </Card>
                 </motion.div>
-              ))}
+              ))
+            ) : (
+              <div className="flex items-center justify-center w-full py-8">
+                <p className="text-gray-500">
+                  Tidak ada properti {convertToTitleCase(data?.type || "")} yang{" "}
+                  terkait
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

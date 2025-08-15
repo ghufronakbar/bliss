@@ -20,11 +20,12 @@ import { AnimatedSection } from "@/components/ui/animated-section";
 import { useData } from "@/service/data";
 import { PLACEHOLDER_IMAGE } from "@/constants";
 import { convertToIDR } from "@/helper/formatter";
+import { useRouter } from "next/navigation";
 
 export function RelatedProperties() {
   const { data, isLoading } = useData();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-
+  const router = useRouter();
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
       const scrollDistance = window.innerWidth >= 768 ? -400 : -300;
@@ -99,7 +100,12 @@ export function RelatedProperties() {
               className="group cursor-pointer flex-shrink-0"
               style={{ minWidth: "260px", maxWidth: "300px" }}
             >
-              <Card className="overflow-hidden w-full">
+              <Card
+                className="overflow-hidden w-full"
+                onClick={() => {
+                  router.push(`/property/${prop.id}`);
+                }}
+              >
                 <div className="relative aspect-[4/3]">
                   <Image
                     src={prop.images[0] || PLACEHOLDER_IMAGE}

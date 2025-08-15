@@ -10,6 +10,7 @@ const upsertSchema = z.object({
   id: z.string().optional(),
 
   name: z.string().trim().min(1, "Nama harus diisi"),
+  pdf: z.string().url("Harus mengupload katalog berupa file PDF"),
   images: z.array(z.string().url()).min(1, "Minimal 1 gambar"),
   address: z.string().trim().min(1, "Alamat harus diisi"),
   type: z.enum(Object.values(PropertyType)),
@@ -124,6 +125,7 @@ export const POST = async (req: NextRequest) => {
           description: payload.description,
           features,
           isAvailable: payload.isAvailable,
+          pdf: payload.pdf,
         },
       });
 

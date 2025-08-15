@@ -3,7 +3,16 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 
-import { Upload, X, Image as ImageIcon, FileIcon } from "lucide-react";
+import {
+  Upload,
+  X,
+  Image as ImageIcon,
+  FileIcon,
+  FileBoxIcon,
+  Loader2,
+  FileUpIcon,
+  ImageUpIcon,
+} from "lucide-react";
 import Image from "next/image";
 import { api } from "@/lib/api";
 
@@ -76,7 +85,14 @@ export function FileUpload({
   };
 
   const renderImage = () => {
-    if (previewUrl) {
+    if (isUploading) {
+      return (
+        <div className="w-full h-48 object-cover rounded-lg border flex flex-col items-center justify-center">
+          <ImageUpIcon className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+          <p className="text-sm text-gray-600">Mengupload gambar...</p>
+        </div>
+      );
+    } else if (previewUrl) {
       return (
         <Image
           src={previewUrl}
@@ -100,11 +116,18 @@ export function FileUpload({
   };
 
   const renderFile = () => {
-    if (previewUrl) {
+    if (isUploading) {
       return (
         <div className="w-full h-48 object-cover rounded-lg border flex flex-col items-center justify-center">
-          <FileIcon className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-          <p className="text-sm text-gray-600">File {previewUrl} terupload</p>
+          <FileUpIcon className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+          <p className="text-sm text-gray-600">Mengupload file...</p>
+        </div>
+      );
+    } else if (previewUrl) {
+      return (
+        <div className="w-full h-48 object-cover rounded-lg border flex flex-col items-center justify-center">
+          <FileBoxIcon className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+          <p className="text-sm text-gray-600">File terupload</p>
         </div>
       );
     } else {
@@ -185,7 +208,7 @@ export function FileUpload({
         {accept === "image/*" ? (
           <p>• Format yang didukung: JPG, PNG, GIF, WebP</p>
         ) : (
-          <p>• Format yang didukung: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX</p>
+          <p>• Format yang didukung: PDF</p>
         )}
         <p>• Ukuran maksimal: 5MB</p>
       </div>

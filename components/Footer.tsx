@@ -25,6 +25,7 @@ import {
 } from "react-icons/fa";
 import { SiTiktok, SiKakaotalk, SiLine, SiWechat } from "react-icons/si";
 import { RiTwitterXFill } from "react-icons/ri";
+import { converToReadablePhoneNumber } from "@/helper/formatter";
 
 /** Tipe komponen icon yang dikembalikan */
 type SocialIcon = IconType;
@@ -144,10 +145,23 @@ export function Footer() {
                   <p className="text-gray-400 text-sm">
                     {data?.contact?.address}
                   </p>
-                  <p className="text-gray-400 text-sm">
-                    {data?.contact?.phone.replace(/-/g, "")}
+                  <p
+                    className="text-gray-400 text-sm cursor-pointer"
+                    onClick={() => {
+                      window.open(
+                        `https://wa.me/${data?.contact?.phone}`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    {converToReadablePhoneNumber(data?.contact?.phone || "")}
                   </p>
-                  <p className="text-gray-400 text-sm">
+                  <p
+                    className="text-gray-400 text-sm cursor-pointer"
+                    onClick={() => {
+                      window.open(`mailto:${data?.contact?.email}`, "_blank");
+                    }}
+                  >
                     {data?.contact?.email}
                   </p>
                 </div>

@@ -5,7 +5,11 @@ interface Params {
 }
 const ProductDetailsPage = async ({ params }: Params) => {
   const { id } = await params;
-  return <ProductDetailsClient id={id} />;
+  return (
+    <div className="w-full overflow-x-hidden">
+      <ProductDetailsClient id={id} />
+    </div>
+  );
 };
 
 export default ProductDetailsPage;

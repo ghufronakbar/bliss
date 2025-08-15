@@ -239,6 +239,8 @@ model Property {
   address String
   type    PropertyType
 
+  pdf String @db.Text()
+
   room   Int
   bath   Int
   sqft   Int

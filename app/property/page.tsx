@@ -38,11 +38,11 @@ export default function PropertyListPage() {
         selectedType === "all" || property.type === selectedType;
       const matchesPrice =
         selectedPrice === "all" ||
-        (selectedPrice === "low" && property.price < 800000) ||
+        (selectedPrice === "low" && property.price < 800000000) ||
         (selectedPrice === "medium" &&
-          property.price >= 800000 &&
-          property.price < 1500000) ||
-        (selectedPrice === "high" && property.price >= 1500000);
+          property.price >= 800000000 &&
+          property.price < 1500000000) ||
+        (selectedPrice === "high" && property.price >= 1500000000);
       const matchesAvailability =
         selectedAvailability === "all" ||
         (selectedAvailability === "available" && property.isAvailable) ||
@@ -68,7 +68,12 @@ export default function PropertyListPage() {
       }
     });
 
-  if (isLoading || !data) return null;
+  if (isLoading || !data)
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <div className="w-10 h-10 border-t-transparent border-b-transparent border-r-transparent border-l-transparent border-2 border-primary-600 rounded-full animate-spin"></div>
+      </div>
+    );
 
   return (
     <div className="min-h-screen">
@@ -127,8 +132,8 @@ export default function PropertyListPage() {
                   <SelectValue placeholder="Range Harga" />
                 </SelectTrigger>
                 <SelectContent>
-                  {PRICE_RANGES.map((range) => (
-                    <SelectItem key={range.id} value={range.value}>
+                  {PRICE_RANGES.map((range, index) => (
+                    <SelectItem key={index} value={range.value}>
                       {range.label}
                     </SelectItem>
                   ))}
@@ -142,8 +147,8 @@ export default function PropertyListPage() {
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  {AVAILABILITY_STATUS.map((range) => (
-                    <SelectItem key={range.value} value={range.value}>
+                  {AVAILABILITY_STATUS.map((range, index) => (
+                    <SelectItem key={index} value={range.value}>
                       {range.label}
                     </SelectItem>
                   ))}
@@ -151,9 +156,17 @@ export default function PropertyListPage() {
               </Select>
             </div>
 
-            <Button className="bg-primary-600 hover:bg-primary-700 text-white">
-              <Filter className="h-4 w-4 mr-2" />
-              Filter
+            <Button
+              className="bg-primary-600 hover:bg-primary-700 text-white"
+              onClick={() => {
+                setSearchTerm("");
+                setSelectedType("all");
+                setSelectedPrice("all");
+                setSelectedAvailability("all");
+                setSelectedSort("newest");
+              }}
+            >
+              Reset Filter
             </Button>
           </div>
         </div>
@@ -234,10 +247,10 @@ export default function PropertyListPage() {
 }
 
 const PRICE_RANGES = [
-  { id: "1", type: "priceRange", label: "Semua Harga", value: "all" },
-  { id: "2", type: "priceRange", label: "Dibawah 800M", value: "low" },
-  { id: "3", type: "priceRange", label: "800M - 1.5M", value: "medium" },
-  { id: "4", type: "priceRange", label: "Diatas 1.5M", value: "high" },
+  { label: "Semua Harga", value: "all" },
+  { label: "Dibawah 800 Juta", value: "low" },
+  { label: "800 Juta - 1.5 Milyar", value: "medium" },
+  { label: "Diatas 1.5 Milyar", value: "high" },
 ];
 
 const AVAILABILITY_STATUS = [
